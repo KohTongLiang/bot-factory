@@ -15,7 +15,7 @@ function BotCreation() {
     const [background, setBackground] = useState('');
     const [age, setAge] = useState('');
     const navigate = useNavigate();
-    const { user, loading} = useContext(AuthContext);
+    const { user, loading } = useContext(AuthContext);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -30,56 +30,54 @@ function BotCreation() {
                 age,
             },
         };
-        
+
         await addBot(user.uid, botProfile);
         navigate('/inventory');
     };
 
     return (
-        <Layout>
-            <Container>
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formBasicName">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter name" value={name} onChange={(event) => setName(event.target.value)} />
-                    </Form.Group>
+        <Container>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="formBasicName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" placeholder="Enter name" value={name} onChange={(event) => setName(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicBotProfilePic">
-                        <Form.Label>Bot Profile Picture</Form.Label>
-                        <Form.Control type="text" placeholder="Enter bot profile picture URL" value={botProfilePic} onChange={(event) => setBotProfilePic(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicBotProfilePic">
+                    <Form.Label>Bot Profile Picture</Form.Label>
+                    <Form.Control type="text" placeholder="Enter bot profile picture URL" value={botProfilePic} onChange={(event) => setBotProfilePic(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicShareLink">
-                        <Form.Label>Share Link</Form.Label>
-                        <Form.Control type="text" placeholder="Enter share link" value={shareLink} onChange={(event) => setShareLink(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicShareLink">
+                    <Form.Label>Share Link</Form.Label>
+                    <Form.Control type="text" placeholder="Enter share link" value={shareLink} onChange={(event) => setShareLink(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicCharacteristic">
-                        <Form.Label>Characteristic</Form.Label>
-                        <Form.Control type="text" placeholder="Enter characteristic" value={characteristic} onChange={(event) => setCharacteristic(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicCharacteristic">
+                    <Form.Label>Characteristic</Form.Label>
+                    <Form.Control type="text" placeholder="Enter characteristic" value={characteristic} onChange={(event) => setCharacteristic(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicLanguage">
-                        <Form.Label>Language</Form.Label>
-                        <Form.Control type="text" placeholder="Enter language" value={language} onChange={(event) => setLanguage(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicLanguage">
+                    <Form.Label>Language</Form.Label>
+                    <Form.Control type="text" placeholder="Enter language" value={language} onChange={(event) => setLanguage(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicBackground">
-                        <Form.Label>Background</Form.Label>
-                        <Form.Control type="text" placeholder="Enter background" value={background} onChange={(event) => setBackground(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicBackground">
+                    <Form.Label>Background</Form.Label>
+                    <Form.Control type="text" placeholder="Enter background" value={background} onChange={(event) => setBackground(event.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicAge">
-                        <Form.Label>Age</Form.Label>
-                        <Form.Control type="text" placeholder="Enter age" value={age} onChange={(event) => setAge(event.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicAge">
+                    <Form.Label>Age</Form.Label>
+                    <Form.Control type="text" placeholder="Enter age" value={age} onChange={(event) => setAge(event.target.value)} />
+                </Form.Group>
 
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Form>
-            </Container>
-        </Layout>
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
+        </Container>
     );
 };
 

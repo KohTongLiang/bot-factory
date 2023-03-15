@@ -22,10 +22,16 @@ export function AuthProvider({ children }: any) {
     });
 
     useEffect(() => {
+        console.log("Triggered useEffect");
         if (!loading) {
             setAuthContext({ user, loading });
         }
     }, [user, loading]);
+
+    // useEffect(() => {
+    //     console.log("Triggered useEffect");
+    //     setAuthContext({ user, loading });
+    // }, [loading]);
 
     return (
         <AuthContext.Provider value={authContext}>

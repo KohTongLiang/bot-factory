@@ -1,14 +1,14 @@
-import { FC, useContext } from 'react';
+import { useContext } from 'react';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import { auth, logout } from "../../firebase";
 import { Link } from 'react-router-dom';
 import { ThemeContext } from '../../context/theme-context';
-import '../../style/styles.scss';
 import { AuthContext } from '../../context/AuthContext';
+import '../../style/styles.scss';
 
-const Header: FC = () => {
+function Header() {
   const { theme, setTheme } = useContext(ThemeContext);
-  const { user, loading} = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
   return (
     <Navbar expand="lg" variant={theme} style={{ backgroundColor: "#0D1219" }}>
@@ -20,18 +20,18 @@ const Header: FC = () => {
             {!loading && (
               <>
                 {!user && (
-                  <Nav.Link href="/signin" style={{ textDecoration: 'none' }}>
+                  <Link to="/signin" className='nav-link' style={{ textDecoration: 'none' }}>
                     Log in
-                  </Nav.Link>
+                  </Link>
                 )}
                 {user && (
                   <>
-                    <Nav.Link href="/inventory" style={{ textDecoration: 'none' }}>
+                    <Link to="/inventory" className='nav-link' style={{ textDecoration: 'none' }}>
                       Inventory
-                    </Nav.Link>
-                    <Nav.Link href="/build" style={{ textDecoration: 'none' }}>
+                    </Link>
+                    <Link to="/build" className='nav-link' style={{ textDecoration: 'none' }}>
                       Build
-                    </Nav.Link>
+                    </Link>
                     <Nav.Link onClick={logout} href="/signin" style={{ textDecoration: 'none' }}>
                       Sign out
                     </Nav.Link>
@@ -40,7 +40,6 @@ const Header: FC = () => {
               </>
             )}
           </Nav>
-
         </Navbar.Collapse>
       </Container>
     </Navbar>
