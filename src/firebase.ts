@@ -1,3 +1,5 @@
+import { BotProfile } from "./constants/properties";
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -15,8 +17,11 @@ import {
     query,
     getDocs,
     collection,
+    doc,
     where,
     addDoc,
+    getDoc,
+    deleteDoc,
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -99,6 +104,82 @@ const logout = () => {
     signOut(auth);
 };
 
+// Bot operations
+const addBot = async (userId: string, bot: BotProfile): Promise<void> => {
+    try {
+        const userDocRefQuery = query(collection(db, "users"), where("uid", "==", userId));
+        const userQuerySnapshot = await getDocs(userDocRefQuery);
+        if (userQuerySnapshot.empty) {
+            // console.log("User not found.");
+            return;
+        }
+        const userDocRef = userQuerySnapshot.docs[0].ref;
+        const botCollectionRef = collection(userDocRef, "bots");
+        const docRef = await addDoc(botCollectionRef, bot);
+    } catch (error) {
+        // console.error("Error adding bot to Firestore: ", error);
+    }
+};
+
+async function getAllBots(userId: string): Promise<BotProfile[]> {
+    const userDocRefQuery = query(collection(db, "users"), where("uid", "==", userId));
+    const userQuerySnapshot = await getDocs(userDocRefQuery);
+    if (userQuerySnapshot.empty) {
+        // console.log("User not found.");
+    }
+    const userDocRef = userQuerySnapshot.docs[0].ref;
+    const botCollectionRef = collection(userDocRef, "bots");
+    const q = query(botCollectionRef);
+    const botCollection = await getDocs(q);
+    const botList: BotProfile[] = [];
+
+    botCollection.forEach((doc: any) => {
+        const botData = doc.data();
+        const bot: BotProfile = {
+            name: botData.name,
+            botProfilePic: botData.botProfilePic,
+            shareLink: botData.shareLink,
+            persona: {
+                characteristic: botData.persona.characteristic,
+                language: botData.persona.language,
+                background: botData.persona.background,
+                age: botData.persona.age,
+            },
+        };
+        botList.push(bot);
+    });
+    return botList;
+}
+
+export const deleteBotByName = async (userId: string, botName: string): Promise<void> => {
+    try {
+        // Get reference to the user's bot collection
+        const userDocRefQuery = query(collection(db, "users"), where("uid", "==", userId));
+        const userQuerySnapshot = await getDocs(userDocRefQuery);
+        if (userQuerySnapshot.empty) {
+            console.log("User not found.");
+        }
+        const userDocRef = userQuerySnapshot.docs[0].ref;
+        const botCollectionRef = collection(userDocRef, "bots");
+
+        // Query for the bot document with the given name
+        const querySnapshot = await getDocs(query(botCollectionRef, where("name", "==", botName)));
+
+        // If a matching bot document was found, delete it
+        if (!querySnapshot.empty) {
+            const docRef = querySnapshot.docs[0].ref;
+            await deleteDoc(docRef);
+            console.log("Bot deleted");
+        } else {
+            console.log("No bot found with name:", botName);
+        }
+    } catch (error) {
+        console.error("Error deleting bot:", error);
+    }
+};
+
+
+
 export {
     auth,
     db,
@@ -107,4 +188,6 @@ export {
     registerWithEmailAndPassword,
     sendPasswordReset,
     logout,
+    addBot,
+    getAllBots,
 };

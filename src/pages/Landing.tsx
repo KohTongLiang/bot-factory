@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Layout from '../components/layout';
 import '../style/app.scss'
+
 function Landing() {
+
 
     return (
         <Layout>
@@ -16,7 +18,7 @@ function Landing() {
                         <Col>
                             <h1>Welcome BotFaktory</h1>
                             <p>Make your own bot with its own personality and put it to work within minutes.</p>
-                            <p><Button variant="warning" href="/signup">Get Started</Button></p>
+                            <p><Button variant="warning" href="/inventory">Get Started</Button></p>
                         </Col>
                     </Row>
                 </Container>

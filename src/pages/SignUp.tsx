@@ -1,22 +1,22 @@
 import '../style/app.scss'
+import { useContext } from 'react';
 import { Row, Col, Stack, Container, Form, Button } from 'react-bootstrap';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from '../components/layout';
 import { useEffect, useState } from 'react';
-import { useAuthState } from "react-firebase-hooks/auth";
 import {
-    auth,
     registerWithEmailAndPassword,
     signInWithGoogle,
 } from "../firebase";
+import { AuthContext } from '../context/AuthContext';
 
 function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [password1, setPassword1] = useState("");
     const [name, setName] = useState("");
-    const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
+    const { user, loading } = useContext(AuthContext);
 
     const register = (e: any) => {
         e.preventDefault();

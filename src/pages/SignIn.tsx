@@ -1,22 +1,20 @@
-import { useState, useEffect, ReactEventHandler } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Layout from '../components/layout';
 import '../style/app.scss'
 import { Stack, Row, Col, Container, Form, Button } from 'react-bootstrap';
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import {
-    auth,
     logInWithEmailAndPassword,
     signInWithGoogle,
 } from "../firebase";
+import { AuthContext } from '../context/AuthContext';
 
 function Auth() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [mode, setMode] = useState(true)
-    const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-
+    const { user, loading } = useContext(AuthContext);
+    
     const login = (event: any) => {
         event.preventDefault();
         logInWithEmailAndPassword(email, password)
