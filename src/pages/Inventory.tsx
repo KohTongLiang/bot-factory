@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react'
 import { Container, Row, Col, Button, Card, Form, Stack } from 'react-bootstrap';
 import { BotProfile } from '../constants/properties';
 import ChatBubble from '../components/bot/chat';
-import { getAllBots, deleteBotByName, findBotImage, deleteBotImage } from '../firebase';
+import { getAllBots, deleteBotByName, deleteBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../style/inventory.scss'
