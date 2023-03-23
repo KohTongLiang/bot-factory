@@ -64,7 +64,7 @@ function Inventory() {
             <Row>
                 <div className='card-deck'>
                     {bots.map((bot, index) => (
-                        <>
+                        <div key={bot.name}>
                             {
                                 bot.name.toLowerCase().includes(search.toLowerCase()) && (
                                     <Card key={bot.name}>
@@ -81,7 +81,7 @@ function Inventory() {
                                     </Card>
                                 )
                             }
-                        </>
+                        </div>
                     ))}
                 </div>
             </Row>

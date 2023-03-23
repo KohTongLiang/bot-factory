@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button, Container, Stack } from 'react-bootstrap';
-import { BotProfile } from '../constants/properties';
 import { addBot, uploadBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../style/build.scss';
 
-type UploadedImage = {
+export type UploadedImage = {
     file: File;
     url: string;
 };
@@ -44,12 +43,11 @@ const handleFileUpload = async (
     const file = e.target.files?.[0];
     if (file) {
         const extension = file.name.split(".").pop()?.toLowerCase();
-        if (!allowedExtensions.includes(extension)) {
+        if (extension && !allowedExtensions.includes(extension)) {
             alert(`Invalid file type. Allowed types are ${allowedExtensions.join(", ")}`);
             return;
         }
         try {
-            // const { width, height } = await validateImage(file);
             const url = URL.createObjectURL(file);
             const img = new Image();
             img.src = url;
@@ -62,7 +60,10 @@ const handleFileUpload = async (
                     const ctx = canvas.getContext("2d")!;
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     const resizedUrl = canvas.toDataURL(file.type);
-                    const resizedFile = await fetch(resizedUrl).then((res) => res.blob());
+                    // const resizedFile = await fetch(resizedUrl).then((res) => res.blob());
+                    const resizedFile = await fetch(resizedUrl)
+                        .then(res => res.blob())
+                        .then(blob => new File([blob], file.name, { lastModified: file.lastModified, type: file.type }));
                     resolve({ file: resizedFile, url: resizedUrl });
                 };
             });
@@ -77,7 +78,7 @@ const handleFileUpload = async (
 
 function BotCreation() {
     const [name, setName] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null as UploadedImage | null);
     const [botProfilePic, setBotProfilePic] = useState('');
     const [shareLink, setShareLink] = useState('');
     const [characteristic, setCharacteristic] = useState('');
@@ -99,28 +100,28 @@ function BotCreation() {
             return;
         }
 
-        const botProfile: BotProfile = {
-            name,
-            botProfilePic,
-            shareLink,
+        const botProfile = {
+            name: name,
+            botProfilePic: botProfilePic,
+            shareLink: shareLink,
             persona: {
-                characteristic,
-                language,
-                background,
-                age,
+                characteristic: characteristic,
+                language: language,
+                background: background,
+                age: age,
             },
         };
-
-        botProfile.botProfilePic = await uploadBotImage(user.email, name, image.file);
+        let botImg = await uploadBotImage(user.email, name, image.file);
+        if (botImg) botProfile.botProfilePic = botImg;
         await addBot(user.uid, botProfile);
 
         navigate('/inventory');
     };
 
     const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const uploadedImage = await handleFileUpload(event);
-        if (uploadedImage) {
-            setImage(uploadedImage);
+        const uploadedImg = await handleFileUpload(event);
+        if (uploadedImg) {
+            setImage(uploadedImg);
         }
     }
 
@@ -141,7 +142,7 @@ function BotCreation() {
                         <div>
                             <Form.Group className='py-2'>
                                 <div className='center-item'>
-                                    <img className='preview-img' src={image.url} alt="Uploaded Image"/>
+                                    <img className='preview-img' src={image.url} alt="Uploaded Image" />
                                     <Button variant='danger' onClick={() => setImage(null)}><b>X</b></Button>
                                 </div>
                             </Form.Group>

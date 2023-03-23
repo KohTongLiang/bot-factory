@@ -202,7 +202,8 @@ const uploadBotImage = async (email: string, botName: string, image: any) => {
         console.log(downloadUrl)
         return downloadUrl;
     } catch (error) {
-        console.error("Error uploading image: ", error);
+        // console.error("Error uploading image: ", error);
+        return;
     }
 }
 
@@ -212,6 +213,7 @@ const deleteBotImage =async (email: string, botName: string) => {
         return await deleteObject(botImageRef);
     } catch (error) {
         // console.error("Error deleting image: ", error);
+        return;
     }
 }
 
