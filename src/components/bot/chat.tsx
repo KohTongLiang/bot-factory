@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { callChatModel } from '../../api';
 import { BotProfile } from '../../constants/properties';
+import "../../style/chat.scss";
 
 type Props = {
     bot: BotProfile;
@@ -12,19 +13,45 @@ const ChatModal = ({ bot }: Props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [message, setMessage] = useState('');
+    const [botReply, setBotReply] = useState(false);
     const [conversation, setConversation] = useState([
         {
             role: "system",
             content: `You are ${bot.name}! You are a ${bot.persona.characteristic} ${bot.persona.language} bot. You are ${bot.persona.age} years old and you are a ${bot.persona.background}`,
         }
     ]);
+    const chatSender = new Map<string, string>([
+        ["user", "You"],
+        ["assistant", bot.name],
+    ]);
+
+    const chatWindow = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        async function getBotReply() {
+            const reply = await callChatModel(conversation);
+            setConversation(conversation => [...conversation, { role: "assistant", content: reply }]);
+            setBotReply(false);
+        }
+        if (botReply) getBotReply();
+    }, [botReply]);
+
+    useEffect(() => {
+        if (chatWindow.current) {
+            chatWindow.current.scrollTop = chatWindow.current.scrollHeight;
+        }
+    }, [conversation]);
 
     const handleSendMessage = async () => {
-        setMessage('');
         setConversation(conversation => [...conversation, { role: "user", content: message }]);
-        const reply = await callChatModel(conversation);
-        setConversation(conversation => [...conversation, { role: "assistant", content: reply }]);
-        console.log(conversation);
+        setBotReply(true);
+        setMessage('');
+    };
+
+    const handleKeyDowm = (e: any) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
     };
 
     return (
@@ -32,36 +59,39 @@ const ChatModal = ({ bot }: Props) => {
             <Button variant="primary" onClick={handleShow}>
                 Chat
             </Button>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>{bot.name}</Modal.Title>
+                    <Modal.Title>
+                        <img src={bot.botProfilePic} alt={bot.name}/> {bot.name}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div style={{ display: 'flex' }}>
-                        <img src={bot.botProfilePic} alt={bot.name} width={50} height={50} style={{ borderRadius: '50%' }} />
-                        <div style={{ marginLeft: 10 }}>
+                    {/* <div style={{ display: "flex", flexDirection: "row", justifyContent: 'center' }}> */}
+                    {/* <div style={{ display: "flex", flexDirection: "column", maxWidth: '250px', alignItems: 'center' }}>
+                            <img src={bot.botProfilePic} alt={bot.name} style={{ maxWidth: '100px', borderRadius: '50%' }} />
+                            <p>{bot.persona.characteristic}</p>
                             <p>{bot.persona.background}</p>
-                            <p>Age: {bot.persona.age}</p>
-                        </div>
-                    </div>
-                    <hr />
-                    {/* Sample message log */}
-                    <div style={{ marginBottom: 10 }}>
+                        </div> */}
+                    {/* </div> */}
+                    {/* <hr /> */}
+                    <div ref={chatWindow} className="chat-window">
                         {conversation.map((message, index) => (
-                            <p key={index}>
-                                {message.content}
-                            </p>
+                            <span key={index}>
+                                {(index > 0) && (
+                                    <p key={index} className={message.role === 'assistant' ? "bot-message" : "user-message"}>
+                                        {message.content}
+                                    </p>
+                                )}
+                            </span>
                         ))}
-                        {/* // <p>User: Hi, {bot.name}! How are you today?</p>
-                        // <p>{bot.name}: I'm doing well, thank you! How can I assist you today?</p> */}
                     </div>
-                    {/* Input for user to send message */}
-                    <Form.Control type="text" placeholder="Type your message here" value={message} onChange={(e) => setMessage(e.target.value)} />
+                    <div className='send-chat-component'>
+                        <Form.Control type="text" onKeyDownCapture={handleKeyDowm} placeholder="Type your message here" value={message} onChange={(e) => setMessage(e.target.value)} />
+                        <Button variant="primary" onClick={handleSendMessage}>Send</Button>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShow(false)}>Close</Button>
-                    <Button variant="primary" onClick={handleSendMessage}>Send</Button>
                 </Modal.Footer>
             </Modal>
         </>

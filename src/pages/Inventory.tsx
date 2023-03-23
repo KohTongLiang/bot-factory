@@ -1,16 +1,16 @@
 import { useEffect, useState, useContext } from 'react'
-import { Container, Row, Col, Table, Button } from 'react-bootstrap';
-import Layout from '../components/layout';
-import '../style/app.scss'
+import { Container, Row, Col, Button, Card, Form, Stack } from 'react-bootstrap';
 import { BotProfile } from '../constants/properties';
 import ChatBubble from '../components/bot/chat';
-import { getAllBots, deleteBotByName } from '../firebase';
+import { getAllBots, deleteBotByName, findBotImage, deleteBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import '../style/inventory.scss'
 
 function Inventory() {
     const [bots, setBots] = useState<BotProfile[]>([]);
     const [loadingBots, setLoadingBots] = useState(false);
+    const [search, setSearch] = useState("");
     const navigate = useNavigate();
     const { user, loading } = useContext(AuthContext);
 
@@ -18,75 +18,72 @@ function Inventory() {
         if (loading) {
             return;
         }
-        if (user) {
-            handleBotLoad();
-        } else {
-            navigate("/signin");
+        const loadBot = async () => {
+            if (user) {
+                await handleBotLoad();
+            } else {
+                navigate("/signin");
+            }
         }
+        loadBot();
     }, [user, loading]);
 
-    const deleteBotHandler = (botName: string) => {
-        deleteBotByName(user?.uid, botName);
-        handleBotLoad();
+    const deleteBotHandler = async (botName: string) => {
+        await deleteBotByName(user?.uid, botName);
+        await deleteBotImage(user?.email, botName);
+        await handleBotLoad();
     }
 
-    const handleBotLoad = () => {
+    const handleBotLoad = async () => {
         setLoadingBots(true);
-        getAllBots(user.uid).then((bots) => {
-            setBots(bots);
-            setLoadingBots(false);
-        });
+        const returnedBots = await getAllBots(user.uid)
+        setBots(returnedBots);
+        setLoadingBots(false);
     }
-
 
     return (
         <Container>
-            <Col>
-                <h1>Build time!</h1>
-            </Col>
-            <Row className="my-5 banner">
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Bot Profile Pic</th>
-                            <th>Share Link</th>
-                            <th>Bot details</th>
-                            <th>Chat</th>
-                            <th>#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {loadingBots && <tr><td colSpan={6}>Loading...</td></tr>}
-                        {bots.map((bot, index) => (
-                            <tr key={index}>
-                                <td>{bot.name}</td>
-                                <td>
-                                    <img src={bot.botProfilePic} alt="Bot Profile Pic" />
-                                </td>
-                                <td>
-                                    <a href={bot.shareLink} target="_blank" rel="noreferrer">
-                                        {bot.shareLink}
-                                    </a>
-                                </td>
-                                <td>
-                                    {bot.persona.characteristic}
-                                    <br />
-                                    {bot.persona.characteristic}
-                                    <br />
-                                    {bot.persona.language}
-                                    <br />
-                                    {bot.persona.background}
-                                    <br />
-                                    {bot.persona.age}
-                                    <br />
-                                </td>
-                                <td><ChatBubble bot={bot} /></td>
-                                <td><Button onClick={() => deleteBotHandler(bot.name)} variant='danger'>Delete</Button></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
+            <Row>
+                <Col>
+
+                    <Stack gap={2} className="col-md-5 mx-auto align-div-center">
+                        <h1>Bot Inventory</h1>
+                        <p>Over here, you can manage all the wonderful bots that you have created and even chat with your bots</p>
+                    </Stack>
+                </Col>
+            </Row>
+            <Row>
+                <Form>
+                    <Form.Control
+                        type="search"
+                        placeholder="Search for bots"
+                        onChange={(e: any) => setSearch(e.target.value)}
+                    />
+                </Form>
+            </Row>
+            <Row>
+                <div className='card-deck'>
+                    {bots.map((bot, index) => (
+                        <>
+                            {
+                                bot.name.toLowerCase().includes(search.toLowerCase()) && (
+                                    <Card key={bot.name}>
+                                        <Card.Img src={bot.botProfilePic} />
+                                        <Card.Body>
+                                            <Card.Title>{bot.name}</Card.Title>
+                                            <Card.Text>
+
+                                            </Card.Text></Card.Body>
+                                        <Card.Footer>
+                                            <ChatBubble bot={bot} />
+                                            <Button onClick={() => deleteBotHandler(bot.name)} variant="danger">Delete</Button>
+                                        </Card.Footer>
+                                    </Card>
+                                )
+                            }
+                        </>
+                    ))}
+                </div>
             </Row>
         </Container>
     )

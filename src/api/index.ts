@@ -10,18 +10,22 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export const callChatModel = async (message: Array<any>): Promise<any> => {
-    // const response = await openai.createChatCompletion({
-    //     model: COMPLETION_MODEL,
-    //     messages: message,
-    // });
+    // return await "False reply";
 
-    return await "False reply";
-    
-    // const msg= response.data.choices[0].message?.content;
+    try {
+        const response = await openai.createChatCompletion({
+            model: COMPLETION_MODEL,
+            messages: message,
+        });
 
-    // if (msg !== undefined) {
-    //     return msg;
-    // }
+        const msg= response.data.choices[0].message?.content;
 
-    // log error
-}
+        if (msg !== undefined) {
+            return msg;
+        }
+
+        // log error
+    } catch (error) {
+        return "Server is busy, please try again later."
+    }
+} 

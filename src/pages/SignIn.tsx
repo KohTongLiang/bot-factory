@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import Layout from '../components/layout';
 import '../style/app.scss'
 import { Stack, Row, Col, Container, Form, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
@@ -17,6 +16,11 @@ function Auth() {
 
     const login = (event: any) => {
         event.preventDefault();
+        if (!email || !password) {
+            alert('Please ensure that you have fill in the form fields.');
+            return;
+        }
+        
         logInWithEmailAndPassword(email, password)
     }
 
@@ -56,10 +60,7 @@ function Auth() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                                <Form.Check type="checkbox" label="Check me out" />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            <Form.Group className="mb-2" controlId="formBasicCheckbox">
                                 <Form.Label >
                                     If you do not have an account, sign up <a href="/signup">here</a>
                                 </Form.Label>

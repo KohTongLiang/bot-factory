@@ -2,6 +2,7 @@ import { BotProfile } from "./constants/properties";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { uploadBytes, getStorage, ref, deleteObject, getDownloadURL } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 import {
     GoogleAuthProvider,
@@ -151,6 +152,20 @@ async function getAllBots(userId: string): Promise<BotProfile[]> {
     return botList;
 }
 
+const updateBotConversation = async (userId: string, botName: string, conversation: Array<string>) => {
+    try {
+        const userDocRefQuery = query(collection(db, "users"), where("uid", "==", userId));
+        const userQuerySnapshot = await getDocs(userDocRefQuery);
+        if (userQuerySnapshot.empty) {
+            console.log("User not found.");
+        }
+        const userDocRef = userQuerySnapshot.docs[0].ref;
+        const botCollectionRef = collection(userDocRef, "bots");
+    } catch (error) {
+        console.error("Error updating bot in Firestore: ", error);
+    }
+};
+
 export const deleteBotByName = async (userId: string, botName: string): Promise<void> => {
     try {
         // Get reference to the user's bot collection
@@ -169,14 +184,36 @@ export const deleteBotByName = async (userId: string, botName: string): Promise<
         if (!querySnapshot.empty) {
             const docRef = querySnapshot.docs[0].ref;
             await deleteDoc(docRef);
-            console.log("Bot deleted");
+            // console.log("Bot deleted");
         } else {
-            console.log("No bot found with name:", botName);
+            // console.log("No bot found with name:", botName);
         }
     } catch (error) {
-        console.error("Error deleting bot:", error);
+        // console.error("Error deleting bot:", error);
     }
 };
+const storage = getStorage();
+
+const uploadBotImage = async (email: string, botName: string, image: any) => {
+    try {
+        const botImageRef = ref(storage, `botImages/${email}/${botName}`);
+        await uploadBytes(botImageRef, image);
+        const downloadUrl = await getDownloadURL(botImageRef);
+        console.log(downloadUrl)
+        return downloadUrl;
+    } catch (error) {
+        console.error("Error uploading image: ", error);
+    }
+}
+
+const deleteBotImage =async (email: string, botName: string) => {
+    try {
+        const botImageRef = ref(storage, `botImages/${email}/${botName}`);
+        return await deleteObject(botImageRef);
+    } catch (error) {
+        // console.error("Error deleting image: ", error);
+    }
+}
 
 
 
@@ -190,4 +227,7 @@ export {
     logout,
     addBot,
     getAllBots,
+    uploadBotImage,
+    deleteBotImage,
+    findBotImage,
 };

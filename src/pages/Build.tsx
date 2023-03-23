@@ -1,13 +1,83 @@
 import React, { useState, useContext } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Stack } from 'react-bootstrap';
 import { BotProfile } from '../constants/properties';
-import Layout from '../components/layout';
-import { addBot } from '../firebase';
+import { addBot, uploadBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import '../style/build.scss';
+
+type UploadedImage = {
+    file: File;
+    url: string;
+};
+
+type ImageSize = {
+    width: number;
+    height: number;
+};
+
+const allowedExtensions = ["jpg", "jpeg", "png"];
+const MAX_WIDTH = 250;
+const MAX_HEIGHT = 250;
+
+const validateImage = (file: File): Promise<ImageSize> => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            const { width, height } = img;
+            if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+                reject(new Error(`Image must be less than ${MAX_WIDTH}x${MAX_HEIGHT}`));
+            } else {
+                resolve({ width, height });
+            }
+        };
+        img.onerror = () => {
+            reject(new Error("Invalid image file"));
+        };
+        img.src = URL.createObjectURL(file);
+    });
+};
+
+const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>
+): Promise<UploadedImage | undefined> => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const extension = file.name.split(".").pop()?.toLowerCase();
+        if (!allowedExtensions.includes(extension)) {
+            alert(`Invalid file type. Allowed types are ${allowedExtensions.join(", ")}`);
+            return;
+        }
+        try {
+            // const { width, height } = await validateImage(file);
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.src = url;
+
+            return await new Promise((resolve) => {
+                img.onload = async () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = MAX_HEIGHT;
+                    const ctx = canvas.getContext("2d")!;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const resizedUrl = canvas.toDataURL(file.type);
+                    const resizedFile = await fetch(resizedUrl).then((res) => res.blob());
+                    resolve({ file: resizedFile, url: resizedUrl });
+                };
+            });
+
+            // return { file, url };
+        } catch (error) {
+            alert(error);
+            return;
+        }
+    }
+};
 
 function BotCreation() {
     const [name, setName] = useState('');
+    const [image, setImage] = useState(null);
     const [botProfilePic, setBotProfilePic] = useState('');
     const [shareLink, setShareLink] = useState('');
     const [characteristic, setCharacteristic] = useState('');
@@ -19,6 +89,16 @@ function BotCreation() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (name.trim() === '' ||
+            image === null ||
+            characteristic.trim() === '' ||
+            background.trim() === ''
+        ) {
+            alert("Make sure all fields are filled out.")
+            return;
+        }
+
         const botProfile: BotProfile = {
             name,
             botProfilePic,
@@ -31,53 +111,66 @@ function BotCreation() {
             },
         };
 
+        botProfile.botProfilePic = await uploadBotImage(user.email, name, image.file);
         await addBot(user.uid, botProfile);
+
         navigate('/inventory');
     };
 
+    const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const uploadedImage = await handleFileUpload(event);
+        if (uploadedImage) {
+            setImage(uploadedImage);
+        }
+    }
+
     return (
-        <Container>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formBasicName">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter name" value={name} onChange={(event) => setName(event.target.value)} />
-                </Form.Group>
+        <div className='build-background'>
+            <Container>
+                <Form onSubmit={handleSubmit} className='build-page-container'>
+                    <Stack gap={3}>
+                        <h4>Build your own bot!</h4>
+                        <p>Fill in the details about how you want your bot to be.</p>
+                    </Stack>
+                    <Form.Group controlId="formBasicName" className='py-2'>
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control type="text" placeholder="Butlerbot" value={name} onChange={(event) => setName(event.target.value)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicBotProfilePic">
-                    <Form.Label>Bot Profile Picture</Form.Label>
-                    <Form.Control type="text" placeholder="Enter bot profile picture URL" value={botProfilePic} onChange={(event) => setBotProfilePic(event.target.value)} />
-                </Form.Group>
+                    {image && (
+                        <div>
+                            <Form.Group className='py-2'>
+                                <div className='center-item'>
+                                    <img className='preview-img' src={image.url} alt="Uploaded Image"/>
+                                    <Button variant='danger' onClick={() => setImage(null)}><b>X</b></Button>
+                                </div>
+                            </Form.Group>
+                            <Form.Group className="py-2">
+                            </Form.Group>
+                        </div>
+                    )}
 
-                <Form.Group controlId="formBasicShareLink">
-                    <Form.Label>Share Link</Form.Label>
-                    <Form.Control type="text" placeholder="Enter share link" value={shareLink} onChange={(event) => setShareLink(event.target.value)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicBotProfilePic" className='py-2'>
+                        <Form.Label>Bot Profile Picture</Form.Label>
+                        <Form.Control type="file" placeholder="Enter bot profile picture URL" value={botProfilePic} onChange={handleImageChange} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicCharacteristic">
-                    <Form.Label>Characteristic</Form.Label>
-                    <Form.Control type="text" placeholder="Enter characteristic" value={characteristic} onChange={(event) => setCharacteristic(event.target.value)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicCharacteristic" className='py-2'>
+                        <Form.Label>Characteristic</Form.Label>
+                        <Form.Control as="textarea" rows={5} placeholder="Butlerbot has refined taste and speaks in gentlemanly manner." value={characteristic} onChange={(event) => setCharacteristic(event.target.value)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicLanguage">
-                    <Form.Label>Language</Form.Label>
-                    <Form.Control type="text" placeholder="Enter language" value={language} onChange={(event) => setLanguage(event.target.value)} />
-                </Form.Group>
+                    <Form.Group controlId="formBasicBackground" className='py-2'>
+                        <Form.Label>Background</Form.Label>
+                        <Form.Control as="textarea" rows={5} placeholder="ButlerBot comes from rich aristocratic english family." value={background} onChange={(event) => setBackground(event.target.value)} />
+                    </Form.Group>
 
-                <Form.Group controlId="formBasicBackground">
-                    <Form.Label>Background</Form.Label>
-                    <Form.Control type="text" placeholder="Enter background" value={background} onChange={(event) => setBackground(event.target.value)} />
-                </Form.Group>
-
-                <Form.Group controlId="formBasicAge">
-                    <Form.Label>Age</Form.Label>
-                    <Form.Control type="text" placeholder="Enter age" value={age} onChange={(event) => setAge(event.target.value)} />
-                </Form.Group>
-
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        </Container>
+                    <Button variant="primary" type="submit" className='my-4'>
+                        Build
+                    </Button>
+                </Form>
+            </Container>
+        </div>
     );
 };
 

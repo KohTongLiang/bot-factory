@@ -13,7 +13,7 @@ function Header() {
   return (
     <Navbar expand="lg" variant={theme} style={{ backgroundColor: "#0D1219" }}>
       <Container>
-        <Navbar.Brand><Link to="/" style={{ textDecoration: 'none' }}>BotFaktory</Link></Navbar.Brand>
+        <Navbar.Brand><Link to="/" style={{ textDecoration: 'none', color: 'white' }}>BotFaktory</Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

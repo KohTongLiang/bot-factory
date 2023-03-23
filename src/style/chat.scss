@@ -1,0 +1,38 @@
+.bot-message {
+    background-color: aquamarine;
+    border-radius: 1rem;
+    border-bottom-left-radius: 0;
+    padding: 1rem;
+    margin: 1rem 5rem 1rem 1rem;
+}
+
+.user-message {
+    background-color: lightcoral;
+    border-radius: 1rem;
+    border-bottom-right-radius: 0;
+    padding: 1rem;
+    margin: 1rem 1rem 1rem 5rem;
+}
+
+.send-chat-component {
+    display: flex;
+    flex-direction: row;
+
+    .form-control {
+        margin: 0.5rem;
+    }
+    
+    button {
+        margin: 0.5rem;
+    }
+}
+
+img { 
+    max-width: 50px;
+    border-radius: 50%;
+}
+
+.chat-window {
+    overflow-y: auto;
+    height: 50vh;
+}

@@ -1,0 +1,47 @@
+body {
+    background-image: none;
+}
+
+.card-deck {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-initial;
+    align-items: left;
+    align-content: left;
+
+    @media only screen and (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        .card {
+            width: 80%;
+        }
+    }
+}
+
+.card {
+    flex: auto;
+    width: 25%;
+    margin: 2rem;
+    max-width: 250px;
+}
+
+.card-body {
+    overflow-y: hidden;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+        margin: 1%;
+        width: 100%;
+    }
+}
+
+.card-img {
+    max-width: 100%;
+    max-height: 250px;
+}

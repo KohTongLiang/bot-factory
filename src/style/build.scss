@@ -1,0 +1,30 @@
+body {
+    .build-background {
+        background-image: url('./src/images/bot2.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+.build-page-container {
+    margin: 0 25% 0 25%;
+    padding: 2rem;
+    background-color: rgba(200, 203, 233, 0.9);
+    border-radius: 5%;
+
+    .center-item {
+        display: flex;
+    }
+
+    img {
+        border-radius: 1rem;
+    }
+
+    @media only screen and (max-width: 768px) {
+        margin: 0 5% 0 5%;
+    }
+}
+
+.preview-img {
+    max-width: 100%;
+}

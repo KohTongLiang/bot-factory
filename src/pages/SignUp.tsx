@@ -30,7 +30,6 @@ function SignUp() {
             return;
         }
 
-        console.log("TEST");
         registerWithEmailAndPassword(name, email, password);
     }
 
@@ -85,9 +84,6 @@ function SignUp() {
                                 placeholder="Confirm Password"
                                 onChange={(e) => setPassword1(e.target.value)}
                             />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                            <Form.Check type="checkbox" label="Check me out" />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Label >

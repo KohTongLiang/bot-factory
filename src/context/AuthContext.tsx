@@ -1,6 +1,5 @@
 import { createContext } from "react";
-import firebase from "firebase/app";
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebase";
 
@@ -22,16 +21,10 @@ export function AuthProvider({ children }: any) {
     });
 
     useEffect(() => {
-        console.log("Triggered useEffect");
         if (!loading) {
             setAuthContext({ user, loading });
         }
     }, [user, loading]);
-
-    // useEffect(() => {
-    //     console.log("Triggered useEffect");
-    //     setAuthContext({ user, loading });
-    // }, [loading]);
 
     return (
         <AuthContext.Provider value={authContext}>
