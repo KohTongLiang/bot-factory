@@ -229,5 +229,4 @@ export {
     getAllBots,
     uploadBotImage,
     deleteBotImage,
-    findBotImage,
 };
