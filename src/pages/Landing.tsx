@@ -1,17 +1,12 @@
-import { useState } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import Layout from '../components/layout';
-import '../style/app.scss'
+import '../style/app.scss';
+import '../style/landing.scss';
 
 function Landing() {
 
 
     return (
-        <div style={{
-            backgroundImage: `url('./src/images/bot1.png')`,
-            height: "90vh",
-            backgroundSize: "cover"
-        }}>
+        <div className='landing-background'>
             <Container>
                 <Row className="my-5 banner" style={{ color: "white" }}>
                     <Col>
