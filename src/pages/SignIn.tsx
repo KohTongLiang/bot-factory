@@ -31,7 +31,7 @@ function Auth() {
 
     return (
         <Container>
-            <Row className="my-5">
+            <Row className="my-4 mx-4">
                 <Col>
                     <div className="themed-colour">
                         <Stack gap={2} className="col-md-5 mx-auto align-div-center">

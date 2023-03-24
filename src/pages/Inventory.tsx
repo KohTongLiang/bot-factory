@@ -45,21 +45,22 @@ function Inventory() {
         <Container>
             <Row>
                 <Col>
-
-                    <Stack gap={2} className="col-md-5 mx-auto align-div-center">
+                    <Stack gap={2} className="my-4 mx-4 align-div-center">
                         <h1>Bot Inventory</h1>
                         <p>Over here, you can manage all the wonderful bots that you have created and even chat with your bots</p>
                     </Stack>
                 </Col>
             </Row>
-            <Row>
-                <Form>
-                    <Form.Control
-                        type="search"
-                        placeholder="Search for bots"
-                        onChange={(e: any) => setSearch(e.target.value)}
-                    />
-                </Form>
+            <Row >
+                <Col>
+                    <Form className="my-4 mx-4">
+                        <Form.Control
+                            type="search"
+                            placeholder="Search for bots"
+                            onChange={(e: any) => setSearch(e.target.value)}
+                        />
+                    </Form>
+                </Col>
             </Row>
             <Row>
                 <div className='card-deck'>
