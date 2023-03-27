@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react'
-import { Container, Row, Col, Button, Card, Form, Stack } from 'react-bootstrap';
+import { Container, Row, Col, Button, Card, Form, Stack, Modal } from 'react-bootstrap';
 import { BotProfile } from '../constants/properties';
 import ChatBubble from '../components/bot/chat';
 import { getAllBots, deleteBotByName, deleteBotImage } from '../firebase';
@@ -9,6 +9,8 @@ import '../style/inventory.scss'
 
 function Inventory() {
     const [bots, setBots] = useState<BotProfile[]>([]);
+    const [showDeleteConfirmation, setDeleteShowConfirmation] = useState(false);
+    const [botToBeDeleted, setBotToBeDeleted] = useState("");
     const [loadingBots, setLoadingBots] = useState(false);
     const [search, setSearch] = useState("");
     const navigate = useNavigate();
@@ -28,11 +30,22 @@ function Inventory() {
         loadBot();
     }, [user, loading]);
 
-    const deleteBotHandler = async (botName: string) => {
-        await deleteBotByName(user?.uid, botName);
-        await deleteBotImage(user?.email, botName);
+    const handleClose = () => setDeleteShowConfirmation(false);
+
+    const handleConfirm = async () => {
+        // Code to execute when user confirms action
+        await deleteBotByName(user?.uid, botToBeDeleted);
+        await deleteBotImage(user?.email, botToBeDeleted);
         await handleBotLoad();
-    }
+        handleClose();
+        alert(`${botToBeDeleted} bot has been deleted successfully!`);
+        setBotToBeDeleted("");
+    };
+
+    const deleteBotHandler = async (botName: string) => {
+        setBotToBeDeleted(botName);
+        setDeleteShowConfirmation(true);
+    };
 
     const handleBotLoad = async () => {
         setLoadingBots(true);
@@ -86,6 +99,21 @@ function Inventory() {
                     ))}
                 </div>
             </Row>
+
+            <Modal show={showDeleteConfirmation} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirm Delete</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete this bot?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        No
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirm}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     )
 }
