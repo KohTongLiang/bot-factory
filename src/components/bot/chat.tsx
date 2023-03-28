@@ -17,7 +17,7 @@ const ChatModal = ({ bot }: Props) => {
     const [conversation, setConversation] = useState([
         {
             role: "system",
-            content: `You are ${bot.name}! You are a ${bot.persona.characteristic} ${bot.persona.language} bot. You are ${bot.persona.age} years old and you are a ${bot.persona.background}`,
+            content: `You are ${bot.name}! This is how you should behave: ${bot.characteristic}. This is the knowledge base which contains the only information you can talk about: ${bot.knowledgeBase}`,
         }
     ]);
     const chatSender = new Map<string, string>([

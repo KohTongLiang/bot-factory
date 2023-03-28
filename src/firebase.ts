@@ -139,13 +139,8 @@ async function getAllBots(userId: string): Promise<BotProfile[]> {
         const bot: BotProfile = {
             name: botData.name,
             botProfilePic: botData.botProfilePic,
-            shareLink: botData.shareLink,
-            persona: {
-                characteristic: botData.persona.characteristic,
-                language: botData.persona.language,
-                background: botData.persona.background,
-                age: botData.persona.age,
-            },
+            characteristic: botData.characteristic,
+            knowledgeBase: botData.knowledgeBase,
         };
         botList.push(bot);
     });
@@ -202,7 +197,7 @@ const uploadBotImage = async (email: string, botName: string, image: any) => {
         console.log(downloadUrl)
         return downloadUrl;
     } catch (error) {
-        // console.error("Error uploading image: ", error);
+        console.error("Error uploading image: ", error);
         return;
     }
 }
@@ -212,7 +207,7 @@ const deleteBotImage =async (email: string, botName: string) => {
         const botImageRef = ref(storage, `botImages/${email}/${botName}`);
         return await deleteObject(botImageRef);
     } catch (error) {
-        // console.error("Error deleting image: ", error);
+        console.error("Error deleting image: ", error);
         return;
     }
 }

@@ -6,9 +6,11 @@ import { getAllBots, deleteBotByName, deleteBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../style/inventory.scss'
+import { InventoryContext } from '../context/inventoryContext';
 
 function Inventory() {
-    const [bots, setBots] = useState<BotProfile[]>([]);
+    // const [bots, setBots] = useState<BotProfile[]>([]);
+    const { bots, reload } = useContext(InventoryContext);
     const [showDeleteConfirmation, setDeleteShowConfirmation] = useState(false);
     const [botToBeDeleted, setBotToBeDeleted] = useState("");
     const [loadingBots, setLoadingBots] = useState(false);
@@ -20,14 +22,8 @@ function Inventory() {
         if (loading) {
             return;
         }
-        const loadBot = async () => {
-            if (user) {
-                await handleBotLoad();
-            } else {
-                navigate("/signin");
-            }
-        }
-        loadBot();
+
+        if (!user) navigate("/signin");
     }, [user, loading]);
 
     const handleClose = () => setDeleteShowConfirmation(false);
@@ -36,7 +32,7 @@ function Inventory() {
         // Code to execute when user confirms action
         await deleteBotByName(user?.uid, botToBeDeleted);
         await deleteBotImage(user?.email, botToBeDeleted);
-        await handleBotLoad();
+        await reload(user?.uid);
         handleClose();
         alert(`${botToBeDeleted} bot has been deleted successfully!`);
         setBotToBeDeleted("");
@@ -46,13 +42,6 @@ function Inventory() {
         setBotToBeDeleted(botName);
         setDeleteShowConfirmation(true);
     };
-
-    const handleBotLoad = async () => {
-        setLoadingBots(true);
-        const returnedBots = await getAllBots(user.uid)
-        setBots(returnedBots);
-        setLoadingBots(false);
-    }
 
     return (
         <Container>

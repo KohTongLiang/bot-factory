@@ -4,6 +4,7 @@ import { addBot, uploadBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../style/build.scss';
+import { InventoryContext } from '../context/inventoryContext';
 
 export type UploadedImage = {
     file: File;
@@ -80,13 +81,11 @@ function BotCreation() {
     const [name, setName] = useState('');
     const [image, setImage] = useState(null as UploadedImage | null);
     const [botProfilePic, setBotProfilePic] = useState('');
-    const [shareLink, setShareLink] = useState('');
     const [characteristic, setCharacteristic] = useState('');
-    const [language, setLanguage] = useState('');
-    const [background, setBackground] = useState('');
-    const [age, setAge] = useState('');
+    const [knowledgeBase, setKnowledgeBase] = useState('');
     const navigate = useNavigate();
     const { user, loading } = useContext(AuthContext);
+    const { reload } = useContext(InventoryContext);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -94,7 +93,7 @@ function BotCreation() {
         if (name.trim() === '' ||
             image === null ||
             characteristic.trim() === '' ||
-            background.trim() === ''
+            knowledgeBase.trim() === ''
         ) {
             alert("Make sure all fields are filled out.")
             return;
@@ -103,17 +102,14 @@ function BotCreation() {
         const botProfile = {
             name: name,
             botProfilePic: botProfilePic,
-            shareLink: shareLink,
-            persona: {
-                characteristic: characteristic,
-                language: language,
-                background: background,
-                age: age,
-            },
+            characteristic: characteristic,
+            knowledgeBase: knowledgeBase,
         };
+        
         let botImg = await uploadBotImage(user.email, name, image.file);
         if (botImg) botProfile.botProfilePic = botImg;
         await addBot(user.uid, botProfile);
+        await reload(user.uid);
 
         navigate('/inventory');
     };
@@ -131,7 +127,7 @@ function BotCreation() {
                 <Form onSubmit={handleSubmit} className='build-page-container'>
                     <Stack gap={3}>
                         <h4>Build your own bot!</h4>
-                        <p>Fill in the details about how you want your bot to be.</p>
+                        <p>Fill in the details about how you want your bot to behave and what kind of knowledge it possess.</p>
                     </Stack>
                     <Form.Group controlId="formBasicName" className='py-2'>
                         <Form.Label>Name</Form.Label>
@@ -162,8 +158,8 @@ function BotCreation() {
                     </Form.Group>
 
                     <Form.Group controlId="formBasicBackground" className='py-2'>
-                        <Form.Label>Background</Form.Label>
-                        <Form.Control as="textarea" rows={5} placeholder="ButlerBot comes from rich aristocratic english family." value={background} onChange={(event) => setBackground(event.target.value)} />
+                        <Form.Label>Knowledge Base</Form.Label>
+                        <Form.Control as="textarea" rows={5} placeholder="A butler is a person who works in a house serving and is a domestic worker in a large household. The household contains 4 children in which the user is the eldest." value={knowledgeBase} onChange={(event) => setKnowledgeBase(event.target.value)} />
                     </Form.Group>
 
                     <Button variant="primary" type="submit" className='my-4'>
