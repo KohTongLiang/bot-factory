@@ -62,7 +62,7 @@ const ChatModal = ({ bot }: Props) => {
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>
-                        <img src={bot.botProfilePic} alt={bot.name}/> {bot.name}
+                        <img className='chat-img' src={bot.botProfilePic} alt={bot.name}/> {bot.name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

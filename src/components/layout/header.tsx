@@ -20,12 +20,20 @@ function Header() {
             {!loading && (
               <>
                 {!user && (
-                  <Link to="/signin" className='nav-link' style={{ textDecoration: 'none' }}>
-                    Log in
-                  </Link>
+                  <>
+                    <Nav.Link href="/documentation" style={{ textDecoration: 'none' }}>
+                      Documentation
+                    </Nav.Link>
+                    <Link to="/signin" className='nav-link' style={{ textDecoration: 'none' }}>
+                      Log in
+                    </Link>
+                  </>
                 )}
                 {user && (
                   <>
+                    <Nav.Link href="/documentation" style={{ textDecoration: 'none' }}>
+                      Documentation
+                    </Nav.Link>
                     <Link to="/inventory" className='nav-link' style={{ textDecoration: 'none' }}>
                       Inventory
                     </Link>

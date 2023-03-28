@@ -35,3 +35,12 @@
 .component-paragraphs {
     // padding: 0 25vw 0 25vw;
 }
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+
+    button {
+        margin: 0.5rem;
+    }
+}

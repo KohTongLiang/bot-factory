@@ -7,7 +7,7 @@ const Footer: FC = () => {
     <footer className="footer" style={{ backgroundColor: "#0D1219" }}>
       <div className="footer-content" style={{ color: "white" }}>
         &copy; {new Date().getFullYear()} - 
-        <span> Development </span>
+        <span> BotFaktory </span>
       </div>
     </footer>
   );

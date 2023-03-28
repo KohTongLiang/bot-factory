@@ -45,7 +45,7 @@ function SignUp() {
                     <div className="themed-colour">
                         <Stack gap={2} className="col-md-5 mx-auto align-div-center">
                             <h1>Sign up</h1>
-                            <p>Sign up for good stuff.</p>
+                            <p>Sign up to use BotFaktory.</p>
                         </Stack>
                     </div>
                     <Form onSubmit={(e) => register(e)}>
@@ -55,9 +55,6 @@ function SignUp() {
                                 type="email"
                                 placeholder="Enter email"
                                 onChange={(e) => setEmail(e.target.value)} />
-                            <Form.Text className="text-muted">
-                                We'll never share your email with anyone else.
-                            </Form.Text>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Username</Form.Label>
@@ -65,9 +62,6 @@ function SignUp() {
                                 type="username"
                                 placeholder="Enter username"
                                 onChange={(e) => setName(e.target.value)} />
-                            <Form.Text className="text-muted">
-                                We'll never share your email with anyone else.
-                            </Form.Text>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicPassword">
                             <Form.Label>Password</Form.Label>
@@ -90,12 +84,10 @@ function SignUp() {
                                 If you already have an account, sign in here <a href="/signin">here</a>
                             </Form.Label>
                         </Form.Group>
-                        <Form.Group className="mb-4" controlId="">
+                        <Form.Group className="mb-4 button-row" controlId="">
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="">
                             <Button
                                 variant="primary"
                                 className="register__btn register__google"

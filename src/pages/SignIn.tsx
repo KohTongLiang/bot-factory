@@ -20,7 +20,7 @@ function Auth() {
             alert('Please ensure that you have fill in the form fields.');
             return;
         }
-        
+
         logInWithEmailAndPassword(email, password)
     }
 
@@ -36,7 +36,7 @@ function Auth() {
                     <div className="themed-colour">
                         <Stack gap={2} className="col-md-5 mx-auto align-div-center">
                             <h1>Sign in</h1>
-                            <p>Sign in with your account to get some cool features.</p>
+                            <p>Sign in with your account to start using BotFaktory.</p>
                         </Stack>
                     </div>
                     <div className='component-paragraphs'>
@@ -48,9 +48,6 @@ function Auth() {
                                     placeholder="Enter email"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <Form.Text className="text-muted">
-                                    We'll never share your email with anyone else.
-                                </Form.Text>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label>Password</Form.Label>
@@ -65,20 +62,19 @@ function Auth() {
                                     If you do not have an account, sign up <a href="/signup">here</a>
                                 </Form.Label>
                             </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            <Form.Group className="mb-3 button-row">
                                 <Button
                                     variant="primary"
                                     type="submit"
                                 >
                                     Submit
                                 </Button>
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicCheckbox">
                                 <Button onClick={signInWithGoogle}>
                                     Login with Google
                                 </Button>
                             </Form.Group>
-
+                            <Form.Group className="mb-3" controlId="">
+                            </Form.Group>
                         </Form>
                     </div>
                 </Col>

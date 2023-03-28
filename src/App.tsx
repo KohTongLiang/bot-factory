@@ -8,6 +8,7 @@ import Build from './pages/Build';
 import { AuthProvider } from './context/AuthContext';
 import { InventoryProvider } from './context/inventoryContext';
 import Layout from './components/layout';
+import Documentation from './pages/Documentation';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
               <Route path='/signup' element={<SignUp />} />
               <Route path='/inventory' element={<Inventory />} />
               <Route path='/build' element={<Build />} />
+              <Route path='/documentation' element={<Documentation />} />
             </Routes>
           </Layout>
         </BrowserRouter >
