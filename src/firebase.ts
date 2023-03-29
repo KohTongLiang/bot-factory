@@ -32,13 +32,13 @@ import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCE4hSZo8hqRkum6e5PX966jNhwO1MlkRU",
-    authDomain: "build-a-bot-project.firebaseapp.com",
-    projectId: "build-a-bot-project",
-    storageBucket: "build-a-bot-project.appspot.com",
-    messagingSenderId: "444636773640",
-    appId: "1:444636773640:web:a3d561aa88b85cb41580bd",
-    measurementId: "G-59EYCTNWDW"
+    apiKey: import.meta.env.VITE_API_KEY,
+    authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_APP_ID,
+    measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
@@ -48,7 +48,7 @@ const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const googleProvider = new GoogleAuthProvider();
 initializeAppCheck(app, {
-    provider: new ReCaptchaV3Provider('6LcLOEAlAAAAAG132byXgmpZmRsLLH54x3qg0kH_'),
+    provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
     isTokenAutoRefreshEnabled: true,
 });
 

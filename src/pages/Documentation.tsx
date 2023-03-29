@@ -28,7 +28,7 @@ const Documentation: React.FC = () => {
                 <Col md={3}>
                     <Nav variant="pills" className="flex-column" defaultActiveKey='a'>
                         <Nav.Item>
-                            <Nav.Link eventKey='a' onClick={() => setActiveKey(DocumentationType.userOnboarding)}>User Onboarding</Nav.Link>
+                            <Nav.Link eventKey='a' onClick={() => setActiveKey(DocumentationType.userOnboarding)}>Get Started</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey='b' onClick={() => setActiveKey(DocumentationType.usingApp)}>Using BotFaktory</Nav.Link>
@@ -42,7 +42,7 @@ const Documentation: React.FC = () => {
                     <div className="col-9">
                         {activeKey === DocumentationType.userOnboarding && (
                             <div>
-                                <h2>User Onboarding</h2>
+                                <h2>Get Started</h2>
                                 <p>If you're new to the app, follow these steps to get started:</p>
                                 <ol>
                                     <li>Click <a href="signUp">here</a> to go to the sign up page and fill in the details for your new account.</li>
@@ -76,7 +76,7 @@ const Documentation: React.FC = () => {
                             <div>
                                 <h2>Changelog</h2>
                                 <ul>
-                                    <li>Version 1.0.0 (Mar 2023): Basic bot creation and chatting features.</li>
+                                    <li>Version 1.0.0 (29 Mar 2023): Basic bot creation and chatting features.</li>
                                 </ul>
                             </div>
                         )}

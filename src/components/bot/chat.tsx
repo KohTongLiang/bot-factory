@@ -62,7 +62,7 @@ const ChatModal = ({ bot }: Props) => {
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>
-                        <img className='chat-img' src={bot.botProfilePic} alt={bot.name}/> {bot.name}
+                        <img className='chat-img' src={bot.botProfilePic} alt={bot.name} /> {bot.name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -84,6 +84,11 @@ const ChatModal = ({ bot }: Props) => {
                                 )}
                             </span>
                         ))}
+                        {botReply && (
+                            <p className='bot-message'>
+                                {bot.name} is typing...
+                            </p>
+                        )}
                     </div>
                     <div className='send-chat-component'>
                         <Form.Control type="text" onKeyDownCapture={handleKeyDowm} placeholder="Type your message here" value={message} onChange={(e) => setMessage(e.target.value)} />

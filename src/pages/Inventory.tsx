@@ -1,15 +1,13 @@
 import { useEffect, useState, useContext } from 'react'
 import { Container, Row, Col, Button, Card, Form, Stack, Modal } from 'react-bootstrap';
-import { BotProfile } from '../constants/properties';
 import ChatBubble from '../components/bot/chat';
-import { getAllBots, deleteBotByName, deleteBotImage } from '../firebase';
+import { deleteBotByName, deleteBotImage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../style/inventory.scss'
 import { InventoryContext } from '../context/inventoryContext';
 
 function Inventory() {
-    // const [bots, setBots] = useState<BotProfile[]>([]);
     const { bots, reload } = useContext(InventoryContext);
     const [showDeleteConfirmation, setDeleteShowConfirmation] = useState(false);
     const [botToBeDeleted, setBotToBeDeleted] = useState("");
@@ -49,7 +47,7 @@ function Inventory() {
                 <Col>
                     <Stack gap={2} className="my-4 mx-4 align-div-center">
                         <h1>Bot Inventory</h1>
-                        <p>Over here, you can manage all the wonderful bots that you have created and even chat with your bots</p>
+                        <p>Manage your bots here.</p>
                     </Stack>
                 </Col>
             </Row>
