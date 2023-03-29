@@ -37,7 +37,6 @@ const validateImage = (file: File): Promise<ImageSize> => {
         img.src = URL.createObjectURL(file);
     });
 };
-
 const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>
 ): Promise<UploadedImage | undefined> => {
@@ -106,7 +105,7 @@ function BotCreation() {
             knowledgeBase: knowledgeBase,
         };
         
-        let botImg = await uploadBotImage(user.email, name, image.file);
+        let botImg = await uploadBotImage(user.uid, name, image.file);
         if (botImg) botProfile.botProfilePic = botImg;
         await addBot(user.uid, botProfile);
         await reload(user.uid);

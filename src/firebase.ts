@@ -24,6 +24,8 @@ import {
     getDoc,
     deleteDoc,
 } from "firebase/firestore";
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -45,6 +47,11 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const googleProvider = new GoogleAuthProvider();
+initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider('6LcLOEAlAAAAAG132byXgmpZmRsLLH54x3qg0kH_'),
+    isTokenAutoRefreshEnabled: true,
+});
+
 
 const signInWithGoogle = async () => {
     try {
@@ -189,12 +196,17 @@ export const deleteBotByName = async (userId: string, botName: string): Promise<
 };
 const storage = getStorage();
 
-const uploadBotImage = async (email: string, botName: string, image: any) => {
+const uploadBotImage = async (uid: string, botName: string, image: any) => {
     try {
-        const botImageRef = ref(storage, `botImages/${email}/${botName}`);
-        await uploadBytes(botImageRef, image);
+        const botImageRef = ref(storage, `botImages/${uid}/${botName}`);
+        const metadata = {
+            customMetadata: {
+                uid,
+                botName,
+            },
+        };
+        await uploadBytes(botImageRef, image, metadata);
         const downloadUrl = await getDownloadURL(botImageRef);
-        console.log(downloadUrl)
         return downloadUrl;
     } catch (error) {
         console.error("Error uploading image: ", error);
@@ -202,7 +214,7 @@ const uploadBotImage = async (email: string, botName: string, image: any) => {
     }
 }
 
-const deleteBotImage =async (email: string, botName: string) => {
+const deleteBotImage = async (email: string, botName: string) => {
     try {
         const botImageRef = ref(storage, `botImages/${email}/${botName}`);
         return await deleteObject(botImageRef);
