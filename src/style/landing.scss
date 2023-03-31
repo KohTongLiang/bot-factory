@@ -1,9 +1,15 @@
 body {
     .landing-background {
-        background-image: url('/bot1.png');
+        background-image: url('/web/bot1.webp');
         background-repeat: no-repeat;
         background-size: cover;
         height: 90vh,
+    }
+
+    @media screen and (max-width: 360px) {
+        .build-background {
+            background-image: url('/mobile/bot1.webp');
+        }
     }
 }
 

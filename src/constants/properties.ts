@@ -9,3 +9,11 @@ export interface Message {
     role: string,
     content: string,
 }
+
+export interface FeedbackStruct {
+    topic: string,
+    description: string,
+    type: string,
+    userEmail: string,
+    submittedOn: Date
+}

@@ -1,8 +1,14 @@
 body {
     .build-background {
-        background-image: url('/bot2.png');
+        background-image: url('/web/bot2.webp');
         background-repeat: no-repeat;
         background-size: cover;
+    }
+
+    @media screen and (max-width: 360px) {
+        .build-background {
+            background-image: url('/mobile/bot2.webp');
+        }
     }
 }
 

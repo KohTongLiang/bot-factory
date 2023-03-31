@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Inventory from './pages/Inventory';
 import Build from './pages/Build';
+import Feedback from './pages/Feedback';
 import { AuthProvider } from './context/AuthContext';
 import { InventoryProvider } from './context/inventoryContext';
 import Layout from './components/layout';
@@ -24,6 +25,7 @@ function App() {
               <Route path='/inventory' element={<Inventory />} />
               <Route path='/build' element={<Build />} />
               <Route path='/documentation' element={<Documentation />} />
+              <Route path='/feedback' element={<Feedback />} />
             </Routes>
           </Layout>
         </BrowserRouter >

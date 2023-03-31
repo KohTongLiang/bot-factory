@@ -1,4 +1,4 @@
-import { BotProfile } from "./constants/properties";
+import { BotProfile, FeedbackStruct } from "./constants/properties";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -23,6 +23,7 @@ import {
     addDoc,
     getDoc,
     deleteDoc,
+    setDoc,
 } from "firebase/firestore";
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
@@ -111,6 +112,17 @@ const sendPasswordReset = async (email: string) => {
 const logout = () => {
     signOut(auth);
 };
+
+// feedback
+const submitFeedback = async (feedback: FeedbackStruct): Promise<void> => {
+    try {
+        const feedbacksCollectionRef = collection(db, "feedbacks");
+        await setDoc(doc(feedbacksCollectionRef), feedback);
+    } catch (error) {
+        console.error("Error adding bot to Firestore: ", error);
+    }
+};
+
 
 // Bot operations
 const addBot = async (userId: string, bot: BotProfile): Promise<void> => {
@@ -238,4 +250,5 @@ export {
     getAllBots,
     uploadBotImage,
     deleteBotImage,
+    submitFeedback
 };

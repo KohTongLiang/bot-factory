@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Nav, Stack } from 'react-bootstrap';
-import buildImg from '../../public/build.png';
-import inventoryImg from '../../public/inventory.png';
-import chatImg from '../../public/chat.png';
+import { Container, Row, Col, Nav, Stack, Image } from 'react-bootstrap';
 import '../style/documentation.scss';
 
 const Documentation: React.FC = () => {
@@ -59,16 +56,16 @@ const Documentation: React.FC = () => {
                                 <ol>
                                     <li>Visit <a href="/build">build</a> page.</li>
                                     <li>Fill in the details for the bots.</li>
-                                    <img src={buildImg} alt=""/>
+                                    <Image srcSet='src/images/mobile/build.webp 360w, src/images/web/build.webp 2500w' alt='Screenshot of build page' />
                                     <li>Click build and you should be redirected to the inventory page.</li>
                                 </ol>
                                 <h3>Chatting with the bot</h3>
                                 <ol>
                                     <li>Visit <a href="/inventory">inventory</a> page. You should the newly created bots.</li>
-                                    <img src={inventoryImg} alt=""/>
+                                    <Image srcSet='src/images/mobile/inventory.webp 360w, src/images/web/inventory.webp 2500w' alt='Screenshot of inventory' />
                                     <li>Click on chat button.</li>
                                     <li>Start chatting with the bot.</li>
-                                    <img src={chatImg} alt=""/>
+                                    <Image srcSet='src/images/mobile/chat.webp 360w, src/images/web/chat.webp 2500w' alt='Screenshot of chat box' />
                                 </ol>
                             </div>
                         )}

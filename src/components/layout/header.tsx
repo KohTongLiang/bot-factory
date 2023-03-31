@@ -40,6 +40,9 @@ function Header() {
                     <Link to="/build" className='nav-link' style={{ textDecoration: 'none' }}>
                       Build
                     </Link>
+                    <Link to="/feedback" className='nav-link' style={{ textDecoration: 'none' }}>
+                      Feedback
+                    </Link>
                     <Nav.Link onClick={logout} href="/signin" style={{ textDecoration: 'none' }}>
                       Sign out
                     </Nav.Link>
