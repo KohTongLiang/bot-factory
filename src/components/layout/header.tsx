@@ -19,11 +19,14 @@ function Header() {
           <Nav className="me-auto">
             {!loading && (
               <>
+                <Link to="/about" className='nav-link' style={{ textDecoration: 'none' }}>
+                  About
+                </Link>
+                <Link to="/documentation" className='nav-link' style={{ textDecoration: 'none' }}>
+                  Documentation
+                </Link>
                 {!user && (
                   <>
-                    <Nav.Link href="/documentation" style={{ textDecoration: 'none' }}>
-                      Documentation
-                    </Nav.Link>
                     <Link to="/signin" className='nav-link' style={{ textDecoration: 'none' }}>
                       Log in
                     </Link>
@@ -31,9 +34,6 @@ function Header() {
                 )}
                 {user && (
                   <>
-                    <Nav.Link href="/documentation" style={{ textDecoration: 'none' }}>
-                      Documentation
-                    </Nav.Link>
                     <Link to="/inventory" className='nav-link' style={{ textDecoration: 'none' }}>
                       Inventory
                     </Link>

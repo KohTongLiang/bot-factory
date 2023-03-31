@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { callChatModel } from '../../api';
 import { BotProfile } from '../../constants/properties';
@@ -9,6 +9,7 @@ type Props = {
 };
 
 const ChatModal = ({ bot }: Props) => {
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -42,16 +43,31 @@ const ChatModal = ({ bot }: Props) => {
         }
     }, [conversation]);
 
+    useLayoutEffect(() => {
+        if (textareaRef.current) {
+          textareaRef.current.style.height = 'inherit';
+          textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        }
+      }, [textareaRef, message]);
+
     const handleSendMessage = async () => {
+        if (message.trim() === '') return;
         setConversation(conversation => [...conversation, { role: "user", content: message }]);
         setBotReply(true);
         setMessage('');
     };
 
     const handleKeyDowm = (e: any) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
             handleSendMessage();
         }
+    };
+
+    const handleChange = (event: any) => {
+        setMessage(event.target.value);
+        event.target.style.height = 'auto';
+        event.target.style.height = `${event.target.scrollHeight}px`;
     };
 
     return (
@@ -66,14 +82,6 @@ const ChatModal = ({ bot }: Props) => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* <div style={{ display: "flex", flexDirection: "row", justifyContent: 'center' }}> */}
-                    {/* <div style={{ display: "flex", flexDirection: "column", maxWidth: '250px', alignItems: 'center' }}>
-                            <img src={bot.botProfilePic} alt={bot.name} style={{ maxWidth: '100px', borderRadius: '50%' }} />
-                            <p>{bot.persona.characteristic}</p>
-                            <p>{bot.persona.background}</p>
-                        </div> */}
-                    {/* </div> */}
-                    {/* <hr /> */}
                     <div ref={chatWindow} className="chat-window">
                         {conversation.map((message, index) => (
                             <span key={index}>
@@ -91,7 +99,16 @@ const ChatModal = ({ bot }: Props) => {
                         )}
                     </div>
                     <div className='send-chat-component'>
-                        <Form.Control type="text" onKeyDownCapture={handleKeyDowm} placeholder="Type your message here" value={message} onChange={(e) => setMessage(e.target.value)} />
+                        <Form.Control
+                            ref={textareaRef}
+                            className='chat-box'
+                            as="textarea"
+                            rows={1}
+                            onKeyDownCapture={handleKeyDowm}
+                            placeholder="Type your message here"
+                            value={message}
+                            onChange={handleChange}
+                        />
                         <Button variant="primary" onClick={handleSendMessage}>Send</Button>
                     </div>
                 </Modal.Body>

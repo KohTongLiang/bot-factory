@@ -1,14 +1,12 @@
 
 import React, { useContext, useState } from 'react';
 import { Form, Button, Container, Stack, Dropdown, Col, Row } from 'react-bootstrap';
-import { FeedbackStruct } from '../constants/properties';
 import { submitFeedback } from '../firebase';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Feedback: React.FC = () => {
     const [selectedType, setSelectedType] = useState('Select a type');
-    const [feedback, setFeedback] = useState<FeedbackStruct | null>(null);
     const [topic, setTopic] = useState('');
     const [description, setDescription] = useState('');
     const types = ['Bug', 'Feedback', 'Feature'];
@@ -17,6 +15,11 @@ const Feedback: React.FC = () => {
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!topic || !description || selectedType === 'Select a type') {
+            alert('Please ensure that you have fill in the form fields.');
+            return;
+        }
 
         await submitFeedback({
             topic: topic,

@@ -18,16 +18,22 @@
     display: flex;
     flex-direction: row;
 
+    p {
+        word-wrap: break-word;
+        white-space: pre-line;
+    }
+
     .form-control {
         margin: 0.5rem;
     }
-    
+
     button {
+        max-height: 2.5rem;
         margin: 0.5rem;
     }
 }
 
-.chat-img { 
+.chat-img {
     max-width: 50px;
     border-radius: 50%;
 }
@@ -35,4 +41,10 @@
 .chat-window {
     overflow-y: auto;
     height: 50vh;
+}
+
+.chat-box {
+    overflow-y: hidden;
+    resize: none;
+    max-height: '100px';
 }

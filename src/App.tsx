@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import Inventory from './pages/Inventory';
 import Build from './pages/Build';
 import Feedback from './pages/Feedback';
+import About from './pages/About';
 import { AuthProvider } from './context/AuthContext';
 import { InventoryProvider } from './context/inventoryContext';
 import Layout from './components/layout';
@@ -26,6 +27,7 @@ function App() {
               <Route path='/build' element={<Build />} />
               <Route path='/documentation' element={<Documentation />} />
               <Route path='/feedback' element={<Feedback />} />
+              <Route path='/about' element={<About />} />
             </Routes>
           </Layout>
         </BrowserRouter >

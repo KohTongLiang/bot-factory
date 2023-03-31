@@ -9,6 +9,7 @@ const Documentation: React.FC = () => {
         userOnboarding = 'userOnboarding',
         usingApp = 'usingApp',
         changelog = 'changelog',
+        futurePlans = 'futurePlans'
     }
 
     const handleSelect = (eventKey: string) => {
@@ -16,12 +17,12 @@ const Documentation: React.FC = () => {
     };
     return (
         <Container>
-            <Row className="my-4">
+            <Row className="my-4 mx-2">
                 <Stack gap={5}>
                     <h1>BotFaktory Documentations</h1>
                 </Stack>
             </Row>
-            <Row className="my-5">
+            <Row className="my-5 mx-2">
                 <Col md={3}>
                     <Nav variant="pills" className="flex-column" defaultActiveKey='a'>
                         <Nav.Item>
@@ -32,6 +33,9 @@ const Documentation: React.FC = () => {
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link eventKey='c' onClick={() => setActiveKey(DocumentationType.changelog)}>Changelog</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link eventKey='d' onClick={() => setActiveKey(DocumentationType.futurePlans)}>Future Plans</Nav.Link>
                         </Nav.Item>
                     </Nav>
                 </Col>
@@ -74,6 +78,15 @@ const Documentation: React.FC = () => {
                                 <h2>Changelog</h2>
                                 <ul>
                                     <li>Version 1.0.0 (29 Mar 2023): Basic bot creation and chatting features.</li>
+                                </ul>
+                            </div>
+                        )}
+                        {activeKey === DocumentationType.futurePlans && (
+                            <div>
+                                <h2>Future Plans</h2>
+                                <ul>
+                                    <li>Uploading of documents as knowledge base for bots.</li>
+                                    <li>API for users to integrate bot to their own applications.</li>
                                 </ul>
                             </div>
                         )}

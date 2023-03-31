@@ -12,7 +12,7 @@ function Landing() {
                     <Row className="my-4 mx-4 banner" style={{ color: "white" }}>
                         <Col>
                             <h1>BotFaktory</h1>
-                            <p>Make your own customised bot with its own personality within minutes.</p>
+                            <p>Make your own chat bot with its own personality within minutes.</p>
                             <p><Button variant="warning" href="/documentation">Get Started</Button></p>
                         </Col>
                     </Row>
